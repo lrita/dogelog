@@ -72,6 +72,11 @@ public:
 		CharLineBuffer buffer(file_.GetPointer(), lk_);
 		va_list ap;
 		va_start(ap, format);
+
+		struct tm tm_time;
+		time_t time_now = time(NULL);
+	       	localtime_r(&time_now, &tm_time);
+		buffer.Write("%02d:%02d:%02d ", tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec);
 		buffer.VWrite(format, ap);
 		va_end(ap);
 		return buffer;
@@ -86,6 +91,10 @@ public:
 		}
 
 		CharLineBuffer buffer(file_.GetPointer(), lk_);
+		struct tm tm_time;
+		time_t time_now = time(NULL);
+	       	localtime_r(&time_now, &tm_time);
+		buffer.Write("%02d:%02d:%02d ", tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec);
 		return buffer;
 	};
 };

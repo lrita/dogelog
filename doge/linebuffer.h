@@ -24,7 +24,10 @@ SOFTWARE.
 #pragma once
 #include <cstdio>
 #include <stdarg.h>
+#include <stdint.h>
 #include "mutex.h"
+#include "itoa.h"
+#include "dtoa.h"
 
 namespace doge
 {
@@ -93,6 +96,64 @@ public:
 				Flush(false);
 			*buffer_++ = ch;
 		}
+		return *this;
+	};
+
+	const LineBuffer & operator<<(const bool b) const
+	{
+		if(b)
+		{
+			Put('t'); Put('r'); Put('u'); Put('e');
+		}
+		else
+		{
+			Put('f'); Put('a'); Put('l'); Put('s'); Put('e');
+		}
+		return *this;
+	};
+
+	const LineBuffer & operator<<(const int32_t i) const
+	{
+		char buffer[11];
+		const char * end = internal::i32toa(i, buffer);
+		for(const char * p = buffer; p != end; ++p)
+			Put(*p);
+		return *this;
+	};
+
+	const LineBuffer & operator<<(const uint32_t u) const
+	{
+		char buffer[10];
+		const char * end = internal::u32toa(u, buffer);
+		for(const char * p = buffer; p != end; ++p)
+			Put(*p);
+		return *this;
+	};
+
+	const LineBuffer & operator<<(const int64_t i64) const
+	{
+		char buffer[21];
+		const char * end = internal::i64toa(i64, buffer);
+		for(const char * p = buffer; p != end; ++p)
+			Put(*p);
+		return *this;
+	};
+
+	const LineBuffer & operator<<(const uint64_t u64) const
+	{
+		char buffer[20];
+		const char * end = internal::u64toa(u64, buffer);
+		for(const char * p = buffer; p != end; ++p)
+			Put(*p);
+		return *this;
+	};
+
+	const LineBuffer & operator<<(const double d) const
+	{
+		char buffer[25];
+		const char * end = internal::dtoa(d, buffer);
+		for(const char * p = buffer; p != end; ++p)
+			Put(*p);
 		return *this;
 	};
 
